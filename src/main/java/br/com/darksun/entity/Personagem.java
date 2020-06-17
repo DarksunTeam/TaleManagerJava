@@ -34,7 +34,7 @@ public class Personagem
 		this.background = background;
 		this.interpretacao = interpretacao;
 		this.local = local;
-		if( !local.getResidentes().contains( this ) )
+		if ( !local.getResidentes( ).contains( this ) )
 		{
 			local.addResidentes( this );
 		}
@@ -119,17 +119,17 @@ public class Personagem
 
 	public void setLocal( Localizacao local )
 	{
-		if( this.local != null )
+		if ( this.local != null )
 		{
 			this.local.removeResidentes( this );
 		}
 		this.local = local;
-		if( local != null && !local.getResidentes().contains( this ) )
+		if ( local != null && !local.getResidentes( ).contains( this ) )
 		{
 			local.addResidentes( this );
 		}
 	}
-	
+
 	public LocalDate getDataInicio( )
 	{
 		return this.dataNascimento;

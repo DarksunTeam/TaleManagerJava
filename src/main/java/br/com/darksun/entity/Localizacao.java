@@ -64,11 +64,11 @@ public class Localizacao
 
 	public void addResidentes( Personagem personagem )
 	{
-		if( !this.residentes.contains( personagem ) )
+		if ( !this.residentes.contains( personagem ) )
 		{
 			this.residentes.add( personagem );
 		}
-		if( personagem.getLocal() != this )
+		if ( personagem.getLocal( ) != this )
 		{
 			personagem.setLocal( this );
 		}
@@ -76,18 +76,15 @@ public class Localizacao
 
 	public void removeResidentes( Personagem personagem )
 	{
-		if( this.residentes.contains( personagem ) )
+		if ( this.residentes.contains( personagem ) )
 		{
 			this.residentes.remove( personagem );
-			
-			if( personagem.getLocal( ) == this )
+
+			if ( personagem.getLocal( ) == this )
 			{
 				personagem.setLocal( null );
 			}
-		}		
+		}
 	}
-	
+
 }
-
-
-
