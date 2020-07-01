@@ -6,7 +6,7 @@ public class JPInicial extends JPPadrao
 {
 	public JPInicial( )
 	{
-		this.setBounds( 0, 0, this.largura, this.altura );
-		setBackground( new Color( 232, 228, 201 ) );
+		this.setBounds( 200, 30, this.largura, this.altura );
+		this.setBackground( new Color( 232, 228, 201 ) );
 	}
 }
