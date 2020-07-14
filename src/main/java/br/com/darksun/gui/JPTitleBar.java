@@ -72,6 +72,7 @@ public class JPTitleBar extends JPanel
 		this.maximizeButton.setBackground( this.color );
 		this.CloseButton.setBackground( this.color );
 
+		this.minimizeButton.addMouseListener( getMouseListenerMinimize( frame, minimizeButton ) );
 		this.CloseButton.addMouseListener( getMouseListenerClose( this.CloseButton ) );
 
 		this.minimizeButton.add( imgMinimize );
@@ -82,6 +83,30 @@ public class JPTitleBar extends JPanel
 		this.add( maximizeButton );
 		this.add( CloseButton );
 		this.add( titleArea );
+	}
+	
+	private static MouseListener getMouseListenerMinimize( final JFrame frame, final JPanel button )
+	{
+		return new MouseAdapter( )
+		{
+			@Override
+			public void mouseClicked( MouseEvent e )
+			{
+				frame.setState( JFrame.ICONIFIED );
+			}
+			
+			@Override
+			public void mouseEntered( MouseEvent e )
+			{
+				button.setBackground( new Color( 72, 31, 3 ) );
+			}
+			
+			@Override
+			public void mouseExited( MouseEvent e )
+			{
+				button.setBackground( new Color( 92, 51, 23 ) );
+			}
+		};
 	}
 
 	private static MouseListener getMouseListenerClose( final JPanel button )
