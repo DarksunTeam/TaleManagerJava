@@ -1,9 +1,14 @@
 package br.com.darksun.gui;
 
 import java.awt.Color;
+import java.awt.Frame;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -18,15 +23,14 @@ public class JPTitleBar extends JPanel
 	private JPanel minimizeButton = new JPanel( );
 	private JPanel maximizeButton = new JPanel( );
 	private JPanel CloseButton = new JPanel( );
-	private Color color = new Color( 92, 51, 23 );
+	private Color color = new Color( 102, 61, 33 );
+	private JLabel imgMinimize = new JLabel( "" );
+	private JLabel imgMaximize = new JLabel( "" );
+	private JLabel imgResize = new JLabel( "" );
+	private JLabel imgClose = new JLabel( "" );
 
-	public JPTitleBar( JFrame frame )
+	public JPTitleBar( final JFrame frame )
 	{
-		JLabel imgMinimize = new JLabel( "" );
-		JLabel imgMaximize = new JLabel( "" );
-		JLabel imgResize = new JLabel( "" );
-		JLabel imgClose = new JLabel( "" );
-
 		this.setLayout( null );
 
 		this.setBounds( frame.getBounds( ).width - this.width, 0, this.width, this.height );
@@ -72,7 +76,9 @@ public class JPTitleBar extends JPanel
 		this.maximizeButton.setBackground( this.color );
 		this.CloseButton.setBackground( this.color );
 
+		this.titleArea.addMouseListener( getMouseListenerExtendsTitle( frame ) );
 		this.minimizeButton.addMouseListener( getMouseListenerMinimize( frame, minimizeButton ) );
+		this.maximizeButton.addMouseListener( getMouseListenerMaximize( frame, this.maximizeButton ) );
 		this.CloseButton.addMouseListener( getMouseListenerClose( this.CloseButton ) );
 
 		this.minimizeButton.add( imgMinimize );
@@ -83,8 +89,67 @@ public class JPTitleBar extends JPanel
 		this.add( maximizeButton );
 		this.add( CloseButton );
 		this.add( titleArea );
+
+		frame.repaint( );
+
+		frame.addComponentListener( new ComponentAdapter( )
+		{
+			@Override
+			public void componentResized( ComponentEvent e )
+			{
+				width = ( frame.getBounds( ).width - 200 );
+				setBounds( 200, 0, width, 30 );
+
+				minimizeButton.setBounds( width - ( 30 * 3 ), 0, 30, 30 );
+				maximizeButton.setBounds( width - ( 30 * 2 ), 0, 30, 30 );
+				CloseButton.setBounds( width - ( 30 * 1 ), 0, 30, 30 );
+				titleArea.setBounds( 0, 0, width - ( 30 * 3 ), 30 );
+
+				setBackground( new Color( 102, 61, 33 ) );
+			}
+		} );
+
+		frame.addWindowStateListener( new WindowStateListener( )
+		{
+			public void windowStateChanged( WindowEvent e )
+			{
+				if ( ( e.getNewState( ) & Frame.MAXIMIZED_BOTH ) == Frame.MAXIMIZED_BOTH )
+				{
+					maximizeButton.remove( imgMaximize );
+					maximizeButton.add( imgResize );
+					maximizeButton.setToolTipText( "Rest. Tamanho" );
+				} else if ( ( e.getNewState( ) & Frame.MAXIMIZED_BOTH ) != Frame.MAXIMIZED_BOTH )
+				{
+					maximizeButton.remove( imgResize );
+					maximizeButton.add( imgMaximize );
+					maximizeButton.setToolTipText( "Maximizar" );
+				}
+				maximizeButton.repaint( );
+			}
+		} );
 	}
-	
+
+	private static MouseListener getMouseListenerExtendsTitle( final JFrame frame )
+	{
+		return new MouseAdapter( )
+		{
+			@Override
+			public void mouseClicked( MouseEvent e )
+			{
+				if ( e.getClickCount( ) == 2 )
+				{
+					if ( frame.getExtendedState( ) != JFrame.MAXIMIZED_BOTH )
+					{
+						( ( JFPrincipal ) frame ).maximize( );
+					} else
+					{
+						( ( JFPrincipal ) frame ).resize( );
+					}
+				}
+			}
+		};
+	}
+
 	private static MouseListener getMouseListenerMinimize( final JFrame frame, final JPanel button )
 	{
 		return new MouseAdapter( )
@@ -92,19 +157,50 @@ public class JPTitleBar extends JPanel
 			@Override
 			public void mouseClicked( MouseEvent e )
 			{
-				frame.setState( JFrame.ICONIFIED );
+				( ( JFPrincipal ) frame ).minimize( );
 			}
-			
+
 			@Override
 			public void mouseEntered( MouseEvent e )
 			{
 				button.setBackground( new Color( 72, 31, 3 ) );
 			}
-			
+
 			@Override
 			public void mouseExited( MouseEvent e )
 			{
-				button.setBackground( new Color( 92, 51, 23 ) );
+				button.setBackground( new Color( 102, 61, 33 ) );
+			}
+		};
+	}
+
+	private static MouseListener getMouseListenerMaximize( final JFrame frame, final JPanel button )
+	{
+		return new MouseAdapter( )
+		{
+			@Override
+			public void mouseClicked( MouseEvent e )
+			{
+				if ( frame.getExtendedState( ) != JFrame.MAXIMIZED_BOTH )
+				{
+					( ( JFPrincipal ) frame ).maximize( );
+				} else
+				{
+					( ( JFPrincipal ) frame ).resize( );
+					;
+				}
+			}
+
+			@Override
+			public void mouseEntered( MouseEvent e )
+			{
+				button.setBackground( new Color( 72, 31, 3 ) );
+			}
+
+			@Override
+			public void mouseExited( MouseEvent e )
+			{
+				button.setBackground( new Color( 102, 61, 33 ) );
 			}
 		};
 	}
@@ -128,10 +224,8 @@ public class JPTitleBar extends JPanel
 			@Override
 			public void mouseExited( MouseEvent e )
 			{
-				button.setBackground( new Color( 92, 51, 23 ) );
+				button.setBackground( new Color( 102, 61, 33 ) );
 			}
 		};
-
 	}
-
 }

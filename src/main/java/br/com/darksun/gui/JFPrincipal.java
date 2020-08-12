@@ -8,7 +8,6 @@ public class JFPrincipal extends JFrame
 {
 	private Integer width = 1600;
 	private Integer height = 900;
-	private JPInicial tela = new JPInicial( );
 
 	public JFPrincipal( )
 	{
@@ -20,14 +19,25 @@ public class JFPrincipal extends JFrame
 		this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
 		JPTitleBar titleBar = new JPTitleBar( this );
+		JPInicial tela = new JPInicial( this );
 
 		this.add( titleBar );
 		this.add( tela );
 	}
 
-	public void maximizar( )
+	public void maximize( )
 	{
 		this.setExtendedState( JFrame.MAXIMIZED_BOTH );
+	}
+
+	public void resize( )
+	{
+		this.setSize( this.width, this.height );
+	}
+
+	public void minimize( )
+	{
+		this.setExtendedState( JFrame.ICONIFIED );
 	}
 
 	public static void main( String[ ] args )
